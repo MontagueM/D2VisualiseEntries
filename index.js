@@ -1,7 +1,23 @@
-const supportedFileTypes = [
-    '8080xxxx Structure File',
-    'Texture Header',
-];
+const fileTypeColours = {
+    '8080xxxx Structure File': 'deepskyblue',
+    'Old Mapping Data': 'greenyellow',
+    'OTF Font': 'gold',
+    'BKHD': 'indianred',
+    'Riff': 'lightcoral',
+    'Havok': 'burlywood',
+    'USM Video': 'darkorchid',
+    'Texture Header': 'aquamarine',
+    '12 byte Stride Header': 'orangered',
+    '24 byte Faces Header': 'aqua',
+    '16 byte Unknown Header': 'lightslategray',
+    'DirectX Bytecode Header': 'darkseagreen',
+    'Texture Data': 'cadetblue',
+    'Stride Data': 'crimson',
+    'Unknown Type 40 Data': 'dimgray',
+    'DirectX Bytecode Data': 'darksalmon',
+    'Texture Header (UI)': 'deeppink',
+    'Unknown': 'darkgray',
+};
 
 const Entry = {
     create: function (type, subType) {
@@ -45,11 +61,11 @@ const Entry = {
             if (self.subType === 1 || self.subType === 2 || self.subType === 3) {
                 return 'Texture Data';
             } else if (self.subType === 4) {
-                return 'Stride Header';
+                return 'Stride Data';
             } else if (self.subType === 6) {
-                return 'Faces Header';
+                return 'Faces Data';
             } else if (self.subType === 7) {
-                return 'Unknown Data';
+                return 'Unknown Type 40 Data';
             }
         } else if (self.type === 41) {
             return 'DirectX Bytecode Data';
@@ -67,17 +83,9 @@ const Block = {
         const self = Object.create(this);
         self.fileType = fileType;
         self.entryCount = entryCount;
-        self.colour = self.getColour();
+        self.colour = fileTypeColours[self.fileType];
         return self;
     },
-    getColour: function () {
-        switch (self.fileType) {
-            case supportedFileTypes[0]:
-                return 'blue';
-            case supportedFileTypes[1]:
-                return 'green';
-        }
-    }
 }
 
 
@@ -109,14 +117,20 @@ function processTypes(types) {
             entries[entry.fileType] = 1;
         }
     }
-    console.log(entries);
+    let blocks = [];
+    for (let key in entries) {
+        let value = entries[key];
+        let block = Block.create(key, value);
+        blocks.push(block);
+    }
+    replaceHTML(blocks);
 }
 
 function getNewHTML(blocks) {
     let newHTML = '';
     for (let i=0; i<blocks.length; i++) {
         let block = blocks[i];
-        newHTML += `<div id="a" class="type">${block.fileType}<br>${block.entryCount}</div>\n`;
+        newHTML += `<div class="type" style="background-color: ${block.colour}">${block.fileType}<br>${block.entryCount}</div>\n`;
     }
     return newHTML;
 }
