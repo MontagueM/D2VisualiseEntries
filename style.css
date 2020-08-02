@@ -1,0 +1,41 @@
+.flex-container {
+    padding-top: 100px;
+    justify-content: center;
+    /*background-color: whitesmoke;*/
+    display: flex;
+    align-items: center;
+    width: 75%;
+    height: 90%;
+    position: center;
+    flex-direction: row;
+    flex-wrap: wrap;
+    /*align-content: stretch;*/
+}
+
+#a {
+    background-color: deepskyblue;
+}
+
+#b {
+    background-color: aquamarine;
+}
+
+#c {
+    background-color: orangered;
+}
+
+#d {
+    background-color: yellow;
+}
+
+
+.type {
+    box-sizing: border-box;
+    padding: 50px;
+    padding-top: 115px;
+    font-family: Poppins;
+    word-wrap: normal;
+    width: 300px;
+    height: 300px;
+    text-align: center;
+}

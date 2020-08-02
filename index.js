@@ -8,10 +8,10 @@ const Entry = {
         const self = Object.create(this);
         self.type = type;
         self.subType = subType;
-        self.fileType = getFileType();
+        self.fileType = self.getFileType(self);
         return self;
     },
-    getFileType: function () {
+    getFileType: function (self) {
         if (self.type === 8) {
             // Can use refID and refPkg for better determination of pkg types
             return '8080xxxx Structure File';
@@ -63,15 +63,20 @@ const Entry = {
 }
 
 const Block = {
-    create: function (fileType, entries) {
+    create: function (fileType, entryCount) {
         const self = Object.create(this);
         self.fileType = fileType;
-        self.entries = entries;
+        self.entryCount = entryCount;
         self.colour = self.getColour();
         return self;
     },
     getColour: function () {
-        if (self.fileType === '')
+        switch (self.fileType) {
+            case supportedFileTypes[0]:
+                return 'blue';
+            case supportedFileTypes[1]:
+                return 'green';
+        }
     }
 }
 
@@ -91,8 +96,31 @@ function getInput() {
 }
 
 function processTypes(types) {
-    console.log('Processing types');
+    console.log('Processing types', types);
+    let entries = {};
     for (let i=0; i < types.length; i++) {
-        console.log(types[i]);
+        let type = types[i];
+        let typeArr = type.split(',');
+        console.log(type, typeArr);
+        let entry = Entry.create(parseInt(typeArr[0]), parseInt(typeArr[1]));
+        if (entry.fileType in entries) {
+            entries[entry.fileType] += 1;
+        } else {
+            entries[entry.fileType] = 1;
+        }
     }
+    console.log(entries);
+}
+
+function getNewHTML(blocks) {
+    let newHTML = '';
+    for (let i=0; i<blocks.length; i++) {
+        let block = blocks[i];
+        newHTML += `<div id="a" class="type">${block.fileType}<br>${block.entryCount}</div>\n`;
+    }
+    return newHTML;
+}
+
+function replaceHTML(blocks) {
+    document.getElementById('vis').innerHTML = getNewHTML(blocks);
 }
