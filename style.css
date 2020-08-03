@@ -12,30 +12,16 @@
     /*align-content: stretch;*/
 }
 
-#a {
-    background-color: deeppink;
-}
-
-#b {
-    background-color: aquamarine;
-}
-
-#c {
-    background-color: orangered;
-}
-
-#d {
-    background-color: yellow;
-}
-
-
 .type {
     box-sizing: border-box;
     padding: 50px;
     padding-top: 115px;
-    font-family: Poppins;
     word-wrap: normal;
     width: 300px;
     height: 300px;
     text-align: center;
+}
+
+body {
+    font-family: Poppins;
 }
